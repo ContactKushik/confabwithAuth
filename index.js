@@ -27,8 +27,9 @@ const io = socketIO(server, {
   cors: { 
     origin: [
       "http://localhost:5173",
+      "http://localhost:5174",
       "https://5020-2409-40c4-f-2dec-7d81-afe6-eb8e-b4d2.ngrok-free.app",
-      "http://127.0.0.1:4040",
+      
       "https://5020-2409-40c4-f-2dec-7d81-afe6-eb8e-b4d2.ngrok-free.app", // Replace with your public URL after port forwarding
     ], // Allow requests from localhost:5173, ngrok URL, and your public URL
     methods: ["GET", "POST"],
@@ -56,7 +57,7 @@ let waitingusers = [];
 let rooms = {}; // Store rooms as an object
 
 io.on("connection", (socket) => {
-  console.log(`User connected: ${socket.id}`);
+  console.log(`\n User connected: ${socket.id}`);
   console.log(`Total users connected: ${io.engine.clientsCount}.`);
   console.log(`Total rooms: ${Object.keys(rooms).length}`);
   
@@ -80,7 +81,12 @@ io.on("connection", (socket) => {
 
       // Notify users of the room
       io.to(roomname).emit("joined", roomname);
-      console.log(`Room created: ${roomname}. Total rooms: ${Object.keys(rooms).length}`); // Log total rooms after creation
+      console.log(
+        `Room created: ${roomname}. Total rooms: ${Object.keys(rooms).length}`
+      );
+      console.log(`Total users connected: ${io.engine.clientsCount}.`);
+      console.log(`Total rooms: ${Object.keys(rooms).length}`);
+       // Log total rooms after creation
     } else {
       waitingusers.push(socket);
     }
@@ -92,6 +98,10 @@ io.on("connection", (socket) => {
     console.log(room);
     console.log("Skipped triggered");
     io.to(room).emit("leave");
+    delete rooms[room]; // Remove the room from rooms
+    
+    console.log(`Total users connected: ${io.engine.clientsCount}.`);
+    console.log(`Total rooms: ${Object.keys(rooms).length}`);
   })
   // Handle user disconnect
   socket.on("disconnect", () => {
@@ -103,6 +113,8 @@ io.on("connection", (socket) => {
     if (waitingIndex !== -1) {
       waitingusers.splice(waitingIndex, 1);
       console.log(`User ${socket.id} removed from waiting list`);
+       console.log(`Total users connected: ${io.engine.clientsCount}.`);
+       console.log(`Total rooms: ${Object.keys(rooms).length}`);
       return; // Stop if the user was only in the waiting list
     }
 
@@ -134,21 +146,22 @@ io.on("connection", (socket) => {
           // Notify users of the new room
           io.to(newRoomname).emit("joined", newRoomname);
           console.log(
-            `New room created: ${newRoomname}. Total rooms: ${Object.keys(rooms).length}`
+            `New room created: ${newRoomname}. Total rooms: ${Object.keys(rooms).length} \n`
           ); // Log total rooms after creation
         } else {
           // Add remaining user to the waiting list
           waitingusers.push(remainingUserSocket);
-          console.log(`User ${remainingUserID} added to waiting list`);
-          console.log(`Total rooms: ${Object.keys(rooms).length}`);
+          console.log(`User ${remainingUserID} added to waiting list \n`);
+          // console.log(`Total rooms: ${Object.keys(rooms).length}`);
         }
+        
       }
     }
 console.log(`User disconnected: ${socket.id} \n`);
 console.log(
   `Total users connected: ${io.engine.clientsCount}. Total rooms: ${
     Object.keys(rooms).length
-  }`
+  } \n`
 );
 
     // Notify all users of the total number of online users after a disconnect
