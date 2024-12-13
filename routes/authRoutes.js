@@ -5,6 +5,7 @@ const {
   logoutUser,
   registerUser,
   getChat,
+  getVerify,
 } = require("../controllers/authController.js");
 const passport = require("passport");
 
@@ -22,9 +23,9 @@ router.get("/logout", logoutUser);
 
 // Protect profile route with Passport JWT
 router.get(
-  "/chat",
+  "/verify",
   passport.authenticate("jwt", { session: false }),
-  getChat
+  getVerify
 );
 
 module.exports = router;

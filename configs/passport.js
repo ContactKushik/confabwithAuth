@@ -1,18 +1,13 @@
 const { Strategy: JwtStrategy, ExtractJwt } = require("passport-jwt");
-const {userModel} = require("../models/userModel.js");
+const { userModel } = require("../models/userModel.js");
 const dotenv = require("dotenv");
 
 dotenv.config();
 
-const cookieExtractor = (req) => {
-  if (req && req.cookies) {
-    return req.cookies.token; // Directly return the token from the "token" cookie
-  }
-  return null;
-};
+const token = ExtractJwt.fromAuthHeaderAsBearerToken();
 
 const options = {
-  jwtFromRequest: cookieExtractor, // Use the custom extractor
+  jwtFromRequest: token, // Use the custom extractor
   secretOrKey: process.env.JWT_SECRET, // Use your JWT secret key
 };
 
@@ -30,7 +25,7 @@ const configurePassport = (passport) => {
         return done(null, user);
       } catch (err) {
         console.error("Error in passport strategy:", err);
-        return done(err, false);
+        return done(null, false, { success: false, error: "invalid token" });
       }
     })
   );

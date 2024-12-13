@@ -89,6 +89,6 @@ exports.logoutUser = (req, res) => {
   // res.redirect("/");
 };
 
-exports.getChat = (req, res) => {
-   res.render('chat', { user: req.user });
+exports.getVerify = (req, res) => {
+   res.status(200).json({ success: true, user: req.user });
 };
