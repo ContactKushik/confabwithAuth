@@ -105,16 +105,22 @@ io.on("connection", (socket) => {
   })
   // Handle user disconnect
   socket.on("disconnect", () => {
-    
+    console.log('user disconnected');
     // Remove from waitingusers if applicable
     let waitingIndex = waitingusers.findIndex(
       (waitingUser) => waitingUser.id === socket.id
     );
     if (waitingIndex !== -1) {
       waitingusers.splice(waitingIndex, 1);
+      console.log("yeh part chl rha");
       console.log(`User ${socket.id} removed from waiting list`);
-       console.log(`Total users connected: ${io.engine.clientsCount}.`);
-       console.log(`Total rooms: ${Object.keys(rooms).length}`);
+      //  console.log("Total connected clients:", io.engine.clientsCount);
+       setTimeout(() => {
+         console.log(
+           "Total connected clients after delay:",
+           io.engine.clientsCount
+         );
+       }, 100);
       return; // Stop if the user was only in the waiting list
     }
 
