@@ -158,6 +158,7 @@ io.on("connection", (socket) => {
           // Add remaining user to the waiting list
           waitingusers.push(remainingUserSocket);
           console.log(`User ${remainingUserID} added to waiting list \n`);
+          
           // console.log(`Total rooms: ${Object.keys(rooms).length}`);
         }
         
