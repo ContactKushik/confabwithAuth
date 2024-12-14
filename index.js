@@ -29,9 +29,7 @@ const io = socketIO(server, {
     origin: [
       "http://localhost:5173",
       "http://localhost:5174",
-      "https://5020-2409-40c4-f-2dec-7d81-afe6-eb8e-b4d2.ngrok-free.app",
-      
-      "https://5020-2409-40c4-f-2dec-7d81-afe6-eb8e-b4d2.ngrok-free.app", // Replace with your public URL after port forwarding
+       process.env.CORS_URL, // Use CORS_URL from .env
     ], // Allow requests from localhost:5173, ngrok URL, and your public URL
     methods: ["GET", "POST"],
   },
