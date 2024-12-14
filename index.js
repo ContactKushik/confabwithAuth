@@ -104,6 +104,7 @@ io.on("connection", (socket) => {
     console.log(`Total users connected: ${io.engine.clientsCount}.`);
     console.log(`Total rooms: ${Object.keys(rooms).length}`);
   })
+  
   // Handle user disconnect
   socket.on("disconnect", () => {
     console.log('user disconnected');
@@ -128,6 +129,7 @@ io.on("connection", (socket) => {
     // Find the room the user was part of
     let roomName = Object.keys(rooms).find((room) => rooms[room].users.includes(socket.id));
     if (roomName) {
+      
       const room = rooms[roomName];
       const remainingUserID = room.users.find((id) => id !== socket.id);
 
@@ -165,15 +167,19 @@ io.on("connection", (socket) => {
         
       }
     }
-console.log(`User disconnected: ${socket.id} \n`);
-console.log(
-  `Total users connected: ${io.engine.clientsCount}. Total rooms: ${
-    Object.keys(rooms).length
-  } \n`
-);
 
+    console.log(`User disconnected: ${socket.id} \n`);
+    setTimeout(() => {
+      console.log(
+        `Total users connected: ${io.engine.clientsCount}. Total rooms: ${
+          Object.keys(rooms).length
+        } \n`
+      );
+    }, 100); // 100ms delay
     // Notify all users of the total number of online users after a disconnect
-    io.emit("totalUsers", io.engine.clientsCount);
+    setTimeout(() => {
+        io.emit("totalUsers", io.engine.clientsCount);
+    }, 100); // 100ms delay
   });
 
   socket.on("signalingMessage", function (data) {
