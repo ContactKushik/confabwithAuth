@@ -47,7 +47,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/admin',adminRoutes)
 // authorization will be handled elsewhere in authRoutes
 app.use("/auth", authRoutes);
-
+app.get('/',function (req, res) {
+  res.render('index');
+})
 
 
 // app.get("/", (req, res) => {
